@@ -1,12 +1,16 @@
+'use client'
+
+import React, { Suspense } from "react";
 import Header from "@/components/Header";
 import Posts from "@/components/Posts";
-import Image from "next/image";
 
 export default function Home() {
   return (
     <div>
       <Header />
-      <Posts />
+      <Suspense fallback={<div>Loading courses...</div>}>
+        <Posts />
+      </Suspense>
     </div>
   );
 }
