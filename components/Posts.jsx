@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { decode } from 'html-entities';
 
 const LoadingCard = () => (
   <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
@@ -29,15 +30,25 @@ const Courses = () => {
 
   const perPage = 12
 
-  const fetchPage = async (page) => {
-    const res = await axios.get(
-      `https://totalschoolsolutions.org/wp-json/wp/v2/course?_embed&per_page=${perPage}&page=${page}`
-    )
-    return {
-      data: res.data,
-      totalPages: parseInt(res.headers['x-wp-totalpages'], 10),
-    }
-  }
+const fetchPage = async (page) => {
+  const res = await axios.get(
+    `https://totalschoolsolutions.org/wp-json/wp/v2/course?_embed&per_page=${perPage}&page=${page}`
+  );
+
+  const decodedData = res.data.map((item) => ({
+    ...item,
+    title: {
+      ...item.title,
+      rendered: decode(item.title.rendered),
+    },
+  }));
+
+  return {
+    data: decodedData,
+    totalPages: parseInt(res.headers['x-wp-totalpages'], 10),
+  };
+};
+
 
   useEffect(() => {
     const loadData = async () => {
