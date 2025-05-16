@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { decode } from 'html-entities';
+import Link from 'next/link';
 
 const LoadingCard = () => (
   <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
@@ -108,9 +109,8 @@ const fetchPage = async (page) => {
               const description = post.excerpt?.rendered?.replace(/(<([^>]+)>)/gi, '') || ''
 
               return (
-                <a
-                  href={`/courses/${post.id}`}
-                  key={post.id}
+                <Link 
+                 href={`/courses/${post.id}`} key={post.id}
                   className="bg-white rounded-2xl shadow-md overflow-hidden transition-transform hover:scale-105"
                 >
                   <img
@@ -122,7 +122,7 @@ const fetchPage = async (page) => {
                     <h2 className="text-lg font-semibold mb-2">{title}</h2>
                     <p className="text-gray-600 line-clamp-3">{description}</p>
                   </div>
-                </a>
+                </Link>
               )
             })}
       </div>
